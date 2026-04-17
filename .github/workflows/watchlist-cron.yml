@@ -2,9 +2,6 @@ name: Watchlist Cron
 
 on:
   workflow_dispatch:
-  schedule:
-    # GitHub uses UTC. Vietnam time is UTC+7.
-    - cron: "2,17,32,47 * * * *" # intraday 15m scan after candle close
 
 jobs:
   watchlist-scan:

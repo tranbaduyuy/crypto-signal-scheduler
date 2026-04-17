@@ -2,9 +2,6 @@ name: Outcomes Cron
 
 on:
   workflow_dispatch:
-  schedule:
-    # GitHub uses UTC. Vietnam time is UTC+7.
-    - cron: "4/5 * * * *" # outcomes every 5 minutes, offset from top of hour
 
 jobs:
   outcomes-update:

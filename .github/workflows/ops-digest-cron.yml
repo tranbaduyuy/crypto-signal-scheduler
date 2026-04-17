@@ -2,9 +2,6 @@ name: Ops Digest Cron
 
 on:
   workflow_dispatch:
-  schedule:
-    # GitHub uses UTC. Vietnam time is UTC+7.
-    - cron: "55 0 * * *" # Ops digest daily at 07:55 Vietnam time
 
 jobs:
   ops-digest:

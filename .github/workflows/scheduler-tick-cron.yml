@@ -1,16 +1,19 @@
-name: Health Cron
+name: Scheduler Tick Cron
 
 on:
   workflow_dispatch:
+  schedule:
+    # GitHub uses UTC. The app decides which task slots are due.
+    - cron: "*/5 * * * *"
 
 jobs:
-  health-check:
+  scheduler-tick:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     permissions:
       contents: read
     concurrency:
-      group: health-cron
+      group: scheduler-tick-cron
       cancel-in-progress: false
     env:
       APP_URL: ${{ secrets.APP_URL }}
@@ -22,8 +25,9 @@ jobs:
           test -n "$APP_URL"
           test -n "$CRON_SECRET"
 
-      - name: Check app health
+      - name: Run scheduler tick
         run: |
           curl --fail --show-error --silent --retry 2 --max-time 70 \
+            -X POST \
             -H "Authorization: Bearer $CRON_SECRET" \
-            "$APP_URL/api/health"
+            "$APP_URL/api/scheduler-tick"
