@@ -1,19 +1,19 @@
-name: Outcomes Cron
+name: Health Cron
 
 on:
   workflow_dispatch:
   schedule:
     # GitHub uses UTC. Vietnam time is UTC+7.
-    - cron: "4/5 * * * *" # outcomes every 5 minutes, offset from top of hour
+    - cron: "6,36 * * * *" # health check twice per hour
 
 jobs:
-  outcomes-update:
+  health-check:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     permissions:
       contents: read
     concurrency:
-      group: outcomes-cron
+      group: health-cron
       cancel-in-progress: false
     env:
       APP_URL: ${{ secrets.APP_URL }}
@@ -25,8 +25,8 @@ jobs:
           test -n "$APP_URL"
           test -n "$CRON_SECRET"
 
-      - name: Update open signal outcomes
+      - name: Check app health
         run: |
           curl --fail --show-error --silent --retry 2 --max-time 70 \
             -H "Authorization: Bearer $CRON_SECRET" \
-            "$APP_URL/api/outcomes-update"
+            "$APP_URL/api/health"

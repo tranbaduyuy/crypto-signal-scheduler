@@ -3,8 +3,8 @@ name: RSI Cron
 on:
   workflow_dispatch:
   schedule:
-    # GitHub uses UTC
-    - cron: "17 * * * *" # RSI hourly
+    # GitHub uses UTC. Vietnam time is UTC+7.
+    - cron: "11 * * * *" # RSI hourly, offset from top of hour
 
 jobs:
   rsi-scan:
